@@ -1,21 +1,22 @@
 <?php
 // add the database connection script.
 include_once 'resource/db.php';
+include_once 'resource/validation.php';
 
 // process the form.
 if (isset($_POST['btn_register'])){
     //initialize an array to store any error message from the form
     $form_errors = array();
-
     //Form validation
     $required_fields = array('email', 'username', 'password');
-
-    //loop through the required fields array and popular the form error array
-    foreach($required_fields as $field){
-        if(!isset($_POST[$field]) || $_POST[$field] == NULL){
-            $form_errors[] = $field." is a required field.";
-        }
-    }
+    //call the function to check empty field and merge the return data into form_error array
+    $form_errors = array_merge($form_errors, isEmptyFields($required_fields));
+    //Fields that requires checking for minimum length
+    $fields_min_length = array('username' => 2, 'password' => 3);
+    //call the function to check minimum required length and merge the return data into form_error array
+    $form_errors = array_merge($form_errors, isMinLength($fields_min_length));
+    //email validation / merge the return data into form_error array
+    $form_errors = array_merge($form_errors, isEmail($_POST));
 
     //check if error array is empty, if yes process form data and insert record
     if(empty($form_errors)) {
@@ -39,33 +40,18 @@ if (isset($_POST['btn_register'])){
 
             // check if one new row was created.
             if ($statement->rowCount() == 1) {
-                $result = "<p style='padding:20px; color: green;'> Registration Successful</p>";
+                $result = "<p style='padding:20px; border: 1px solid gray; color: green;'> Registration Successful</p>";
             }
 
         } catch (PDOException $exception) {
-            $result = "<p style='padding:20px; color: red;'> An error occurred: " . $exception->getMessage() . "</p>";
+            $result = "<p style='padding:20px; border: 1px solid gray; color: red;'> An error occurred: " . $exception->getMessage() . "</p>";
         }
 
     } else {
         if(count($form_errors) == 1){
             $result = "<p style='color: red;'> There was 1 error in the form:<br>";
-
-            $result .= "<ul style='color: red;'>";
-            //loop through error array and display all items
-            foreach($form_errors as $error){
-                $result .= "<li> {$error} </li>";
-            }
-            $result .= "</ul></p>";
-
         }else{
             $result = "<p style='color: red;'> There were " .count($form_errors). " errors in the form: <br>";
-
-            $result .= "<ul style='color: red;'>";
-            //loop through error array and display all items
-            foreach($form_errors as $error){
-                $result .= "<li> {$error}</li>";
-            }
-            $result .= "</ul></p>";
         }
     }
 
@@ -85,7 +71,7 @@ if (isset($_POST['btn_register'])){
 <h3>Registration Form</h3>
 
 <?php if (isset($result)) echo $result; ?>
-
+<?php if(!empty($form_errors)) echo showErrors($form_errors); ?>
 <form method="post" action="">
     <table>
         <tr><td>Email:</td> <td><input type="text" name="email" value=""></td></tr>
