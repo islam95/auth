@@ -1,8 +1,7 @@
 <?php
 // add the database connection script.
 include_once 'resource/db.php';
-include_once 'resource/validation.php';
-
+include_once 'resource/functions.php';
 // process the form.
 if (isset($_POST['btn_register'])){
     //initialize an array to store any error message from the form
@@ -17,48 +16,42 @@ if (isset($_POST['btn_register'])){
     $form_errors = array_merge($form_errors, isMinLength($fields_min_length));
     //email validation / merge the return data into form_error array
     $form_errors = array_merge($form_errors, isEmail($_POST));
-
+    // collect form data and store in variables.
+    $email = $_POST['email'];
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    if(isDuplicate("users", "username", $username, $db)){
+        $result = display_message("Username is already taken. Please, try another one.");
+    } elseif(isDuplicate("users", "email", $email, $db)){
+        $result = display_message("Email is already taken. Please, try another one.");
+    }
     //check if error array is empty, if yes process form data and insert record
-    if(empty($form_errors)) {
-        // collect form data and store in variables.
-        $email = $_POST['email'];
-        $username = $_POST['username'];
-        $password = $_POST['password'];
+    elseif(empty($form_errors)) {
         // hashing the password.
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
         try {
             // create SQL insert statement.
-            $sql = "INSERT INTO users (username, email, password, join_date)
-              VALUES (:username, :email, :password, now())";
-
+            $sql = "INSERT INTO users (username, email, password, join_date) VALUES (:username, :email, :password, now())";
             // use PDO prepared to sanitize data.
             $statement = $db->prepare($sql);
-
             // add the data into the database.
             $statement->execute(array(':username' => $username, ':email' => $email, ':password' => $hashed_password));
-
             // check if one new row was created.
             if ($statement->rowCount() == 1) {
-                $result = "<p style='padding:20px; border: 1px solid gray; color: green;'> Registration Successful</p>";
+                $result = display_message("Registration Successful!", "success");
             }
-
         } catch (PDOException $exception) {
-            $result = "<p style='padding:20px; border: 1px solid gray; color: red;'> An error occurred: " . $exception->getMessage() . "</p>";
+            $result = display_message("An error occurred: ".$exception->getMessage());
         }
-
     } else {
         if(count($form_errors) == 1){
-            $result = "<p style='color: red;'> There was 1 error in the form:<br>";
+            $result = display_message("There was 1 error in the form:<br>");
         }else{
-            $result = "<p style='color: red;'> There were " .count($form_errors). " errors in the form: <br>";
+            $result = display_message("There were ".count($form_errors)." errors in the form:<br>");
         }
     }
-
 }
-
 ?>
-
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -67,9 +60,7 @@ if (isset($_POST['btn_register'])){
 </head>
 <body>
 <h2>User Authentication System </h2><hr>
-
 <h3>Registration Form</h3>
-
 <?php if (isset($result)) echo $result; ?>
 <?php if(!empty($form_errors)) echo showErrors($form_errors); ?>
 <form method="post" action="">
