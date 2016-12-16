@@ -62,25 +62,33 @@ if(isset($_POST['btn_password_reset'])){
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Password Reset Page</title>
-</head>
-<body>
-<h2>User Authentication System </h2><hr>
-<h3>Password Reset Form</h3>
-<?php if(isset($result)) echo $result; ?>
-<?php if(!empty($form_errors)) echo showErrors($form_errors); ?>
-<form method="post" action="">
-    <table>
-        <tr><td>Email:</td> <td><input type="text" value="" name="email"></td></tr>
-        <tr><td>New Password:</td> <td><input type="password" value="" name="new_password"></td></tr>
-        <tr><td>Confirm Password:</td> <td><input type="password" value="" name="confirm_password"></td></tr>
-        <tr><td></td><td><input style="float: right;" type="submit" name="btn_password_reset" value="Reset Password"></td></tr>
-    </table>
-</form>
-<p><a href="index.php">Back</a> </p>
-</body>
-</html>
+
+<?php
+$page_title = "Password reset page";
+include_once 'includes/header.php';
+?>
+    <div class="container">
+        <section class="col col-lg-5">
+            <h3>Reset Password</h3><hr>
+            <?php if(isset($result)) echo $result; ?>
+            <?php if(!empty($form_errors)) echo showErrors($form_errors); ?>
+            <form method="post" action="">
+                <div class="form-group">
+                    <label for="email"></label>
+                    <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label for="new_password"></label>
+                    <input type="password" class="form-control" name="new_password" id="new_password" placeholder="New password">
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password"></label>
+                    <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm Password">
+                </div>
+                <button type="submit" name="btn_password_reset" class="btn btn-primary">Reset Password</button>
+            </form>
+        </section>
+        <p><a href="index.php">Back</a> </p>
+    </div>
+
+<?php include_once 'includes/footer.php'; ?>

@@ -58,20 +58,20 @@ function isEmail($data){
  * @return string, list containing all error messages
  */
 function showErrors($form_errors){
-    $errors = "<p><ul style='color: red;'>";
+    $errors = "<div class='alert alert-danger'><ul>";
     //loop through error array and display all items in a list
     foreach($form_errors as $the_error){
         $errors .= "<li> {$the_error} </li>";
     }
-    $errors .= "</ul></p>";
+    $errors .= "</ul></div>";
     return $errors;
 }
 
 function display_message($message, $label = "error"){
     if ($label === "success"){
-        $data = "<p style='padding:20px; border: 1px solid gray; color: green;'>{$message}</p>";
+        $data = "<div class='alert alert-success'>{$message}</div>";
     } else{
-        $data = "<p style='padding:20px; border: 1px solid gray; color: red;'>{$message}</p>";
+        $data = "<div class='alert alert-danger'>{$message}</div>";
     }
     return $data;
 }

@@ -38,24 +38,39 @@ if (isset($_POST['btn_login'])) {
     }
 }
 ?>
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Login</title>
-</head>
-<body>
-<h2>User Authentication System </h2><hr>
-<h3>Login Form</h3>
-<?php if(isset($result)) echo $result; ?>
-<?php if(!empty($form_errors)) echo showErrors($form_errors); ?>
-<form method="post" action="">
-    <table>
-        <tr><td>Username:</td> <td><input type="text" name="username" value=""></td></tr>
-        <tr><td>Password:</td> <td><input type="password" name="password" value=""></td></tr>
-        <tr><td><a href="forgot_password.php">Forgot Password?</a></td><td><input type="submit" name="btn_login" value="Login"></td></tr>
-    </table>
-</form>
-<p><a href="index.php">Back</a> </p>
-</body>
-</html>
+
+<?php
+$page_title = "Login page";
+include_once 'includes/header.php';
+?>
+
+<div class="container">
+    <section class="col col-lg-5">
+        <h3>Login Form</h3><hr>
+        <div>
+        <?php if(isset($result)) echo $result; ?>
+        <?php if(!empty($form_errors)) echo showErrors($form_errors); ?>
+        </div>
+        <div class="clearfix"></div>
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" class="form-control" name="username" id="username" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" name="password" id="password" placeholder="*************">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="remember"> Remember me
+                </label>
+            </div>
+            <a href="forgot_password.php" class="pull-right">Forgot password?</a>
+            <button type="submit" name="btn_login" class="btn btn-primary">Login</button>
+        </form>
+    </section>
+    <p><a href="index.php">Back</a> </p>
+</div>
+
+<?php include_once 'includes/footer.php'; ?>
