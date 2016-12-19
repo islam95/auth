@@ -9,8 +9,12 @@
     <meta name="author" content="Islam Dudaev">
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <!-- My files -->
+    <!-- Other files -->
     <link href="css/myStyles.css" rel="stylesheet">
+
+    <!-- Sweet alert javascript library -->
+    <script src="js/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -39,7 +43,7 @@
                 <?php else: ?>
                     <li><a href="#">About</a></li>
                     <li><a href="#">Contact</a></li>
-                    <li><a href="login.php">Login</a></li>
+                    <li><a href="include.php">Login</a></li>
                     <li><a href="register.php">Register</a></li>
                 <?php endif ?>
             </ul>

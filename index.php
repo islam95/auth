@@ -13,5 +13,4 @@ include_once 'includes/header.php';
 
     </div> <!-- /.container -->
 
-
 <?php include_once 'includes/footer.php'; ?>
